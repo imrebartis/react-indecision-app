@@ -9,7 +9,11 @@ class IndecisionApp extends React.Component {
       options: props.options
     };
   }
-  componentDidMount() {
+
+  // better use componentWillMount()
+  // instead of componentDidlMount(), since the latter
+  // causes the app to re-render
+  componentWillMount() {
     try {
       const json = localStorage.getItem('options');
       // turning the json string into a JS array:

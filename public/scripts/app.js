@@ -26,9 +26,14 @@ var IndecisionApp = function (_React$Component) {
     return _this;
   }
 
+  // better use componentWillMount()
+  // instead of componentDidlMount(), since the latter
+  // causes the app to re-render
+
+
   _createClass(IndecisionApp, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
       try {
         var json = localStorage.getItem('options');
         // turning the json string into a JS array:
