@@ -8,8 +8,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// stateless functional component
-
 var IndecisionApp = function (_React$Component) {
   _inherits(IndecisionApp, _React$Component);
 
@@ -31,19 +29,38 @@ var IndecisionApp = function (_React$Component) {
   _createClass(IndecisionApp, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      console.log('fetching data');
+      try {
+        var json = localStorage.getItem('options');
+        // turning the json string into a JS array:
+        var options = JSON.parse(json);
+
+        if (options) {
+          // updating the options property to the options array
+          // btw { options } is the same as { options: options }
+          this.setState(function () {
+            return { options: options };
+          });
+        }
+      } catch (e) {
+        // Do nothing at all
+      }
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      console.log('saving data');
+      // we need the if statement to make sure state is really changed
+      // & ignore cases like when the Remove all button's been clicked several times
+      if (prevState.options.length !== this.state.options.length) {
+        // the this.state.options is turned into a json string:
+        var json = JSON.stringify(this.state.options);
+        localStorage.setItem('options', json);
+        // checking in the console that options were stored:
+        // localStorage.getItem('options') // => "["1","2","3"]"
+      }
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      // this will be console logged
-      // if u pass into the console e.g.
-      // ReactDOM.render(React.createElement('p'), document.getElementById('app'));
       console.log('componentWillUnmount');
     }
   }, {
@@ -163,6 +180,11 @@ var Options = function Options(props) {
       { onClick: props.handleDeleteOptions },
       'Remove All'
     ),
+    props.options.length === 0 && React.createElement(
+      'p',
+      null,
+      'Please add an option to get started!'
+    ),
     props.options.map(function (option) {
       return React.createElement(Option, {
         key: option,
@@ -216,6 +238,11 @@ var AddOption = function (_React$Component2) {
       this.setState(function () {
         return { error: error };
       });
+
+      // if there's no error clear the input field after entering the option:
+      if (!error) {
+        e.target.elements.option.value = '';
+      }
     }
   }, {
     key: 'render',

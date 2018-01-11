@@ -1,5 +1,3 @@
-// stateless functional component
-
 class IndecisionApp extends React.Component {
   constructor(props) {
     super(props);
@@ -12,15 +10,32 @@ class IndecisionApp extends React.Component {
     };
   }
   componentDidMount() {
-    console.log('fetching data');
+    try {
+      const json = localStorage.getItem('options');
+      // turning the json string into a JS array:
+      const options = JSON.parse(json);
+
+      if (options) {
+        // updating the options property to the options array
+        // btw { options } is the same as { options: options }
+        this.setState(() => ({ options }));
+      }
+    } catch (e) {
+      // Do nothing at all
+    }
   }
   componentDidUpdate(prevProps, prevState) {
-    console.log('saving data');
+    // we need the if statement to make sure state is really changed
+    // & ignore cases like when the Remove all button's been clicked several times
+    if (prevState.options.length !== this.state.options.length) {
+      // the this.state.options is turned into a json string:
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem('options', json);
+      // checking in the console that options were stored:
+      // localStorage.getItem('options') // => "["1","2","3"]"
+    }
   }
   componentWillUnmount() {
-    // this will be console logged
-    // if u pass into the console e.g.
-    // ReactDOM.render(React.createElement('p'), document.getElementById('app'));
     console.log('componentWillUnmount');
   }
   handleDeleteOptions() {
@@ -104,6 +119,7 @@ const Options = (props) => {
   return (
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
+      {props.options.length === 0 && <p>Please add an option to get started!</p>}
       {
         props.options.map((option) => (
           <Option
@@ -147,6 +163,11 @@ class AddOption extends React.Component {
     const error = this.props.handleAddOption(option);
 
     this.setState(() => ({ error }));
+
+    // if there's no error clear the input field after entering the option:
+    if (!error) {
+      e.target.elements.option.value = '';
+    }
   }
   render() {
     return (
