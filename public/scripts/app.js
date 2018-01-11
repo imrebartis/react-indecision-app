@@ -29,6 +29,24 @@ var IndecisionApp = function (_React$Component) {
   }
 
   _createClass(IndecisionApp, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('fetching data');
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      console.log('saving data');
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      // this will be console logged
+      // if u pass into the console e.g.
+      // ReactDOM.render(React.createElement('p'), document.getElementById('app'));
+      console.log('componentWillUnmount');
+    }
+  }, {
     key: 'handleDeleteOptions',
     value: function handleDeleteOptions() {
       this.setState(function () {
@@ -40,7 +58,6 @@ var IndecisionApp = function (_React$Component) {
     value: function handleDeleteOption(optionToRemove) {
       this.setState(function (prevState) {
         return {
-          // return the option only if the remove button hasn't be clicked:
           options: prevState.options.filter(function (option) {
             return optionToRemove !== option;
           })

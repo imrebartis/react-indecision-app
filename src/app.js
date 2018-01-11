@@ -11,12 +11,23 @@ class IndecisionApp extends React.Component {
       options: props.options
     };
   }
+  componentDidMount() {
+    console.log('fetching data');
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('saving data');
+  }
+  componentWillUnmount() {
+    // this will be console logged
+    // if u pass into the console e.g.
+    // ReactDOM.render(React.createElement('p'), document.getElementById('app'));
+    console.log('componentWillUnmount');
+  }
   handleDeleteOptions() {
     this.setState(() => ({ options: [] }));
   }
   handleDeleteOption(optionToRemove) {
     this.setState((prevState) => ({
-      // return the option only if the remove button hasn't be clicked:
       options: prevState.options.filter((option) => optionToRemove !== option)
     }));
   }
