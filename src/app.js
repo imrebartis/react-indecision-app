@@ -1,10 +1,5 @@
-// install -> import -> use
 import React from 'react';
 import ReactDOM from 'react-dom';
+import IndecisionApp from './components/IndecisionApp';
 
-const template = <p> This is jsx </p>;
-ReactDOM.render(template, document.getElementById('app'));
-
-// import validator from 'validator';
-
-// console.log(validator.isEmail('test@gmail.com'))
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'));
